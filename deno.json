@@ -1,0 +1,10 @@
+{
+  "name": "@kuuote/lsp-stream",
+  "version": "2.0.1",
+  "exports": "./lsp_stream.ts",
+  "tasks": {
+    "lint": "deno lint",
+    "ok": "deno task lint && deno fmt --check && deno task test",
+    "test": "deno test -A"
+  }
+}
