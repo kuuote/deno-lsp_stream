@@ -1,6 +1,6 @@
 import { LspDecoderStream, LspEncoderStream } from "./lsp_stream.ts";
-import { assertEquals } from "https://deno.land/std@0.211.0/assert/mod.ts";
-import { concat } from "https://deno.land/std@0.211.0/bytes/concat.ts";
+import { assertEquals } from "jsr:/@std/assert@0.218.2";
+import { concat } from "jsr:/@std/bytes@0.218.2";
 
 class ChunkedStream extends TransformStream<Uint8Array, Uint8Array> {
   constructor(length: number) {

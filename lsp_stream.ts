@@ -1,5 +1,4 @@
-import { concat } from "https://deno.land/std@0.211.0/bytes/concat.ts";
-import { indexOfNeedle } from "https://deno.land/std@0.211.0/bytes/index_of_needle.ts";
+import { concat, indexOfNeedle } from "jsr:/@std/bytes@0.218.2";
 
 const rn = new Uint8Array([0xd, 0xa]);
 const decoder = new TextDecoder();
