@@ -5,10 +5,13 @@ It provides Decoder/Encoder of
 
 ```typescript
 import { LspEncoderStream } from "./lsp_stream.ts";
+import { JsonStringifyStream } from "jsr:/@std/json@0.222.1";
 
-const stream = new LspEncoderStream();
+const stream = new JsonStringifyStream();
 const writer = stream.writable.getWriter();
-stream.readable.pipeTo(Deno.stdout.writable);
+stream.readable
+  .pipeThrough(new LspEncoderStream())
+  .pipeTo(Deno.stdout.writable);
 await writer.write({ foo: "bar" });
 await writer.write({ baz: 100 });
 ```
@@ -21,7 +24,7 @@ const stream = Deno.stdin.readable
 const reader = stream.getReader();
 const result = await reader.read();
 if (!result.done) {
-  const msg = result.value;
+  const msg = JSON.parse(result.value);
 }
 ```
 

@@ -21,9 +21,9 @@ class ChunkedStream extends TransformStream<Uint8Array, Uint8Array> {
 }
 
 async function createStream(
-  data: unknown[],
+  data: string[],
   length: number,
-): Promise<ReadableStream<unknown>> {
+): Promise<ReadableStream<string>> {
   const encoded = await Array.fromAsync(
     ReadableStream.from(data)
       .pipeThrough(new LspEncoderStream()),
@@ -48,7 +48,7 @@ const testData = [{
       line: 20,
     },
   },
-}];
+}].map((data) => JSON.stringify(data));
 
 Deno.test({
   name: "Chunked LSP Stream",
@@ -67,7 +67,7 @@ Deno.test({
             await t.step({
               name: String(i),
               fn() {
-                assertEquals(result.value, testData[i]);
+                assertEquals(JSON.parse(result.value), JSON.parse(testData[i]));
               },
             });
           }

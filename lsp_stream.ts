@@ -12,7 +12,7 @@ enum Mode {
 /**
  * A transform stream that decode byte stream as LSP Base Protocol
  */
-export class LspDecoderStream extends TransformStream<Uint8Array, unknown> {
+export class LspDecoderStream extends TransformStream<Uint8Array, string> {
   #mode = Mode.Header;
   #contentLength = -1;
   #buf = new Uint8Array();
@@ -27,7 +27,7 @@ export class LspDecoderStream extends TransformStream<Uint8Array, unknown> {
 
   #handle(
     chunk: Uint8Array,
-    controller: TransformStreamDefaultController<unknown>,
+    controller: TransformStreamDefaultController<string>,
   ) {
     this.#buf = concat([this.#buf, chunk]);
     while (true) {
@@ -60,7 +60,7 @@ export class LspDecoderStream extends TransformStream<Uint8Array, unknown> {
         if (this.#contentLength <= this.#buf.length) {
           const content = this.#buf.subarray(0, this.#contentLength);
           this.#buf = this.#buf.subarray(this.#contentLength);
-          controller.enqueue(JSON.parse(decoder.decode(content)));
+          controller.enqueue(decoder.decode(content));
           this.#mode = Mode.Header;
         } else {
           return;
@@ -73,11 +73,11 @@ export class LspDecoderStream extends TransformStream<Uint8Array, unknown> {
 /**
  * A transform stream that encode each chunks to byte stream of LSP Base Protocol
  */
-export class LspEncoderStream extends TransformStream<unknown, Uint8Array> {
+export class LspEncoderStream extends TransformStream<string, Uint8Array> {
   constructor() {
     super({
       transform: (chunk, controller) => {
-        const buf = encoder.encode(JSON.stringify(chunk));
+        const buf = encoder.encode(chunk);
         const header = `Content-Length: ${buf.byteLength}\r\n\r\n`;
         const headerRaw = encoder.encode(header);
         controller.enqueue(concat([headerRaw, buf]));
