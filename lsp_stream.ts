@@ -1,4 +1,4 @@
-import { concat, indexOfNeedle } from "jsr:/@std/bytes@0.218.2";
+import { concat, indexOfNeedle } from "jsr:/@std/bytes@0.222.1";
 
 const rn = new Uint8Array([0xd, 0xa]);
 const decoder = new TextDecoder();
